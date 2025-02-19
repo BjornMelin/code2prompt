@@ -1,7 +1,8 @@
 """Module for processing ZIP files and retrieving file paths.
 
-This module provides functions to extract ZIP files into a temporary directory
-and retrieve all file paths recursively while ignoring specified directories.
+This module provides functions to extract ZIP files into a temporary
+directory and retrieve all file paths recursively while ignoring
+specified directories, optionally filtering by file types.
 """
 
 import os
@@ -24,8 +25,8 @@ def extract_zip(zip_path: str) -> str:
         str: The path to the temporary directory containing the extracted files.
 
     Raises:
+        TempFileError: If there's an error creating or accessing the temporary directory.
         FileProcessingError: If the ZIP file is invalid or corrupted.
-        TempFileError: If there's an error creating or accessing temporary directory.
     """
     try:
         temp_dir: str = tempfile.mkdtemp()
@@ -52,14 +53,14 @@ def get_files_from_directory(
     ignore_dirs: Optional[Set[str]] = None,
     file_types: Optional[Set[str]] = None,
 ) -> List[str]:
-    """Retrieve a list of file paths from a directory, excluding ignored directories,
-    and optionally filtering by file types.
+    """Retrieve a list of file paths from a directory, excluding ignored
+    directories and optionally filtering by file types.
 
     Args:
         base_dir (str): The base directory to search for files.
-        ignore_dirs (Set[str], optional): A set of directory names to ignore.
+        ignore_dirs (Optional[Set[str]]): A set of directory names to ignore.
             Defaults to DEFAULT_IGNORE_DIRS.
-        file_types (Set[str], optional): A set of file extensions to include.
+        file_types (Optional[Set[str]]): A set of file extensions to include.
             If None, all files are included.
 
     Returns:
@@ -77,7 +78,7 @@ def get_files_from_directory(
             dirs[:] = [d for d in dirs if d not in ignore_dirs]
             for file in files:
                 if file_types:
-                    ext = os.path.splitext(file)[1].lower()
+                    ext: str = os.path.splitext(file)[1].lower()
                     if ext not in file_types:
                         continue
                 file_path: str = os.path.join(root, file)
