@@ -9,7 +9,6 @@ truncating content, and appending file metadata.
 import os
 from typing import Any, Dict
 
-
 from exceptions import FormatError
 
 
@@ -58,7 +57,7 @@ def format_file_content(
         options (Dict[str, Any], optional): Dictionary containing formatting options:
             - include_boundaries (bool): Whether to include file header/footer boundaries.
             - truncate_length (int): Maximum number of characters for content
-              (0 means no truncation).
+                (0 means no truncation).
             - file_metadata (Dict[str, Any]): Metadata about the file (e.g., size).
         Defaults to None.
 
@@ -69,10 +68,8 @@ def format_file_content(
         FormatError: If an unsupported format is provided or if formatting fails.
     """
     try:
-        # Define valid output formats as a frozen set for immutability and faster lookups
         valid_formats = frozenset({"Plaintext", "Markdown", "XML"})
 
-        # Validate input parameters
         if not isinstance(rel_path, str) or not rel_path.strip():
             raise FormatError("File path must be a non-empty string")
         if not isinstance(content, str):
@@ -82,18 +79,14 @@ def format_file_content(
                 f"Unsupported format. Choose from: {', '.join(valid_formats)}"
             )
 
-        # Truncate content if needed
-        # Initialize options with defaults
         options = options or {}
         truncate_length = options.get("truncate_length", 0)
         include_boundaries = options.get("include_boundaries", True)
         file_metadata = options.get("file_metadata")
 
-        # Truncate content if needed
         if 0 < truncate_length < len(content):
             content = f"{content[:truncate_length]}..."
 
-        # Prepare metadata string
         metadata_str = (
             f" [Size: {file_metadata['size']} bytes]"
             if file_metadata and "size" in file_metadata
@@ -131,6 +124,5 @@ def format_file_content(
                     f"  <content><![CDATA[{content}]]></content>\n"
                     f"</file>\n"
                 )
-
     except Exception as e:
         raise FormatError(f"Failed to format content for {rel_path}: {str(e)}") from e
