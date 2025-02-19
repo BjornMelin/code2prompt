@@ -42,3 +42,6 @@ ENV/
 htmlcov/
 .pytest_cache/
 .mypy_cache/
+
+# Repomix
+repomix-output.txt
