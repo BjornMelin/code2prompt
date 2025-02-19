@@ -7,7 +7,7 @@ and copying the generated prompt to the clipboard.
 
 import os
 import shutil
-from tkinter import Tk, Toplevel, Frame, Button, Label, BooleanVar
+from tkinter import Tk, Toplevel, Frame, Button, Label, BooleanVar, StringVar
 from tkinter import filedialog, messagebox, scrolledtext
 from tkinter.ttk import Combobox
 from typing import Set
@@ -49,7 +49,7 @@ class CodebasePromptGeneratorGUI:
         self.ignore_button.grid(row=0, column=1, padx=5)
 
         Label(top_frame, text="Output Format:").grid(row=0, column=2, padx=5)
-        self.format_var = self.master.tk.StringVar(value="Plaintext")
+        self.format_var = StringVar(master=self.master, value="Plaintext")
         self.format_combo: Combobox = Combobox(
             top_frame,
             textvariable=self.format_var,
