@@ -1,4 +1,4 @@
-"""Configuration module for Code2Prompt.
+"""Configuration module for Code2Prompt Streamlit App.
 
 This module contains default configuration settings for the project,
 including the default directories and files to ignore during prompt generation.
