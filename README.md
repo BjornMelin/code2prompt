@@ -1,6 +1,6 @@
 # Code2Prompt 🚀
 
-**Code2Prompt** is a modern, web-based tool that transforms an entire codebase (e.g., Next.js, Python, or similar projects) into a structured, prompt-optimized format designed for language models like ChatGPT. Leveraging a Streamlit app for a sleek, user-friendly experience while maintaining modular, best-practice code organization, Code2Prompt is your go-to tool for prompt engineering.
+**Code2Prompt** is a modern, web-based tool that transforms one or more ZIP files containing a codebase into a structured, prompt-optimized format for language models like ChatGPT. With a sleek, customizable Streamlit interface, you can upload ZIP files, manage ignore patterns dynamically, filter file types, and customize prompt generation with advanced options.
 
 ---
 
@@ -23,12 +23,22 @@
 
 ## Features ✨
 
-- **Streamlit Web Interface:** Upload ZIP files and configure settings through an interactive sidebar.
-- **Customizable Ignore Settings:** Easily select which directories/files to ignore (e.g., `node_modules`, `.git`, etc.).
-- **Multiple Output Formats:** Generate prompts in **Plaintext**, **Markdown**, or **XML**.
-- **Optimized for LLMs:** Structured file boundaries and language hints improve clarity.
-- **Performance Enhancements:** Utilizes caching and progress feedback for faster processing.
-- **Modular Design:** Clean, modular codebase following best practices with comprehensive documentation.
+- **Modern Streamlit Interface:**
+  - Uses Streamlit's built-in theming with customizable configuration.
+  - Responsive layout with a sidebar for advanced settings and progress indicators.
+- **Advanced Customization Options:**
+  - Dynamic ignore pattern management (including custom patterns).
+  - File type filtering (select which file extensions to process).
+  - Custom prompt header and options to include/exclude file boundaries, truncate content, and add file metadata.
+- **Batch Processing:**
+  - Upload and process multiple ZIP files simultaneously.
+  - Progress bars and detailed logging for processing steps.
+- **Interactive File Tree Viewer:**
+  - Collapsible preview of the file tree, preserved in session state.
+- **Robust Error Handling:**
+  - Clear, user-friendly error messages with custom exceptions.
+- **Extensible & Modular:**
+  - Clean, modular codebase for future enhancements.
 
 ---
 
@@ -39,12 +49,16 @@ graph TD;
     A[streamlit_app.py] --> B[config.py]
     A --> C[file_processor.py]
     A --> D[formatter.py]
+    A --> E[exceptions.py]
 ```
 
-- **config.py:** Contains default configuration settings and ignore directories.
+- **config.py:** Default settings for ignore directories and file type filters.
 - **file_processor.py:** Handles extraction of ZIP files and retrieval of file paths.
-- **formatter.py:** Formats file content into optimized prompts (Plaintext, Markdown, XML).
-- **streamlit_app.py:** Main entry point for the Streamlit app.
+- **formatter.py:** Formats file content into optimized prompts (Plaintext, Markdown, XML) with advanced customization.
+- **exceptions.py:** Custom exceptions for robust error handling.
+- **streamlit_app.py:** Main entry point with advanced UI and customization features.
+- **Makefile:** Shortcut for running the app.
+- **requirements.txt:** Project dependencies.
 
 ---
 
@@ -89,16 +103,17 @@ graph TD;
    ```
 
 2. **Using the App:**
-   - **Upload a ZIP File:** Click the file uploader to select your ZIP file.
-   - **Configure Settings:** Use the sidebar to select directories to ignore and choose your desired output format.
-   - **Generate Prompt:** Click the "Generate Prompt" button to process your file.
-   - **Review & Copy:** The generated prompt is displayed in the text area. Optionally, view a file tree preview.
+   - **Upload ZIP Files:** Upload one or more ZIP files containing your codebase.
+   - **Customize Settings:** Use the sidebar to manage ignore patterns, select file types, choose output format, and adjust other formatting options. Add a custom prompt header if desired.
+   - **Generate Prompt:** Click "Generate Prompt" to process your files.
+   - **Preview & Log:** View the generated prompt, a file tree preview, and processing logs.
+   - **Built-In Theming:** The app uses Streamlit’s built-in theming, so the default Light/Dark modes are available through Streamlit’s config.
 
 ---
 
 ## Screenshots 📸
 
-_Include screenshots or GIFs of the app here to showcase the modern UI._
+_Include screenshots or GIFs of the updated app here to showcase the modern UI and enhanced features._
 
 ![Code2Prompt Screenshot](https://via.placeholder.com/800x400?text=Code2Prompt+Streamlit+App)
 
@@ -113,6 +128,7 @@ graph TD;
     A[streamlit_app.py] --> B[config.py]
     A --> C[file_processor.py]
     A --> D[formatter.py]
+    A --> E[exceptions.py]
 ```
 
 ---

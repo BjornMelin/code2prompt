@@ -1,14 +1,14 @@
 """Module for formatting file contents into prompt-friendly formats.
 
-This module provides functions to detect programming languages based on file extensions
-and to format file content in Plaintext, Markdown, or XML formats optimized for LLM prompts.
-It now supports additional customization options such as including file boundaries,
-truncating content, and appending file metadata.
+This module provides functions to detect programming languages based
+on file extensions and to format file content in Plaintext, Markdown, XML,
+or JSON formats optimized for language model prompts. It supports customization options
+such as including file boundaries, truncating content, and appending file metadata.
 """
 
 import os
+import json
 from typing import Any, Dict
-
 
 from exceptions import FormatError
 
@@ -44,21 +44,20 @@ def get_language(file_name: str) -> str:
 
 
 def format_file_content(
-    rel_path: str,
-    content: str,
-    output_format: str,
-    options: Dict[str, Any] = None,
+    rel_path: str, content: str, output_format: str, options: Dict[str, Any] = None
 ) -> str:
     """Format the content of a file according to the specified output format.
+
+    Supports 'Plaintext', 'Markdown', 'XML', and 'JSON' outputs.
 
     Args:
         rel_path (str): The relative file path.
         content (str): The file content.
-        output_format (str): The desired output format ('Plaintext', 'Markdown', 'XML').
+        output_format (str): The desired output format ('Plaintext', 'Markdown', 'XML', 'JSON').
         options (Dict[str, Any], optional): Dictionary containing formatting options:
             - include_boundaries (bool): Whether to include file header/footer boundaries.
             - truncate_length (int): Maximum number of characters for content
-              (0 means no truncation).
+                (0 means no truncation).
             - file_metadata (Dict[str, Any]): Metadata about the file (e.g., size).
         Defaults to None.
 
@@ -69,10 +68,8 @@ def format_file_content(
         FormatError: If an unsupported format is provided or if formatting fails.
     """
     try:
-        # Define valid output formats as a frozen set for immutability and faster lookups
-        valid_formats = frozenset({"Plaintext", "Markdown", "XML"})
+        valid_formats = frozenset({"Plaintext", "Markdown", "XML", "JSON"})
 
-        # Validate input parameters
         if not isinstance(rel_path, str) or not rel_path.strip():
             raise FormatError("File path must be a non-empty string")
         if not isinstance(content, str):
@@ -82,18 +79,14 @@ def format_file_content(
                 f"Unsupported format. Choose from: {', '.join(valid_formats)}"
             )
 
-        # Truncate content if needed
-        # Initialize options with defaults
         options = options or {}
-        truncate_length = options.get("truncate_length", 0)
-        include_boundaries = options.get("include_boundaries", True)
+        truncate_length: int = options.get("truncate_length", 0)
+        include_boundaries: bool = options.get("include_boundaries", True)
         file_metadata = options.get("file_metadata")
 
-        # Truncate content if needed
         if 0 < truncate_length < len(content):
             content = f"{content[:truncate_length]}..."
 
-        # Prepare metadata string
         metadata_str = (
             f" [Size: {file_metadata['size']} bytes]"
             if file_metadata and "size" in file_metadata
@@ -103,34 +96,49 @@ def format_file_content(
 
         match output_format:
             case "Plaintext":
-                if not include_boundaries:
-                    return content
-                return (
-                    f"=== File: {rel_path}{metadata_str} ===\n"
-                    f"{content}\n"
-                    f"=== End of File: {rel_path} ===\n"
+                result = (
+                    content
+                    if not include_boundaries
+                    else (
+                        f"=== File: {rel_path}{metadata_str} ===\n"
+                        f"{content}\n"
+                        f"=== End of File: {rel_path} ===\n"
+                    )
                 )
-
             case "Markdown":
                 fence: str = f"```{language}" if language else "```"
-                if not include_boundaries:
-                    return f"{fence}\n{content}\n```\n"
-                return (
-                    f"## File: {rel_path}{metadata_str}\n"
-                    f"{fence}\n"
-                    f"{content}\n"
-                    "```\n"
+                result = (
+                    f"{fence}\n{content}\n```\n"
+                    if not include_boundaries
+                    else (
+                        f"## File: {rel_path}{metadata_str}\n"
+                        f"{fence}\n"
+                        f"{content}\n"
+                        "```\n"
+                    )
                 )
-
             case "XML":
                 lang_attr: str = f' language="{language}"' if language else ""
-                if not include_boundaries:
-                    return f"<content><![CDATA[{content}]]></content>\n"
-                return (
-                    f'<file path="{rel_path}"{lang_attr}{metadata_str}>\n'
-                    f"  <content><![CDATA[{content}]]></content>\n"
-                    f"</file>\n"
+                result = (
+                    f"<content><![CDATA[{content}]]></content>\n"
+                    if not include_boundaries
+                    else (
+                        f'<file path="{rel_path}"{lang_attr}{metadata_str}>\n'
+                        f"  <content><![CDATA[{content}]]></content>\n"
+                        f"</file>\n"
+                    )
                 )
+            case "JSON":
+                file_obj = {
+                    "path": rel_path,
+                    "content": content,
+                }
+                if language:
+                    file_obj["language"] = language
+                if file_metadata:
+                    file_obj["metadata"] = file_metadata
+                result = json.dumps(file_obj, indent=2)
 
+        return result
     except Exception as e:
         raise FormatError(f"Failed to format content for {rel_path}: {str(e)}") from e

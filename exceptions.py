@@ -26,6 +26,5 @@ class TempFileError(Code2PromptError):
 class FormatError(Code2PromptError):
     """Exception raised when there's an error formatting file content.
 
-    This occurs when the application fails to format file content into the requested
-    output format (Plaintext, Markdown, or XML).
+    This occurs when the application fails to format file content into the requested output format.
     """
