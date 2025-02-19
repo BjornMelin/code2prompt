@@ -1,6 +1,6 @@
 """Module for processing ZIP files and retrieving file paths.
 
-This module provides functions to extract ZIP files into temporary directories
+This module provides functions to extract ZIP files into a temporary directory
 and retrieve all file paths recursively while ignoring specified directories.
 """
 
@@ -29,9 +29,9 @@ def extract_zip(zip_path: str) -> str:
     try:
         with zipfile.ZipFile(zip_path, "r") as zip_ref:
             zip_ref.extractall(temp_dir)
-    except Exception as e:
+    except zipfile.BadZipFile as e:
         shutil.rmtree(temp_dir)
-        raise Exception(f"Failed to extract ZIP file: {e}")
+        raise zipfile.BadZipFile(f"Failed to extract ZIP file: {e}") from e
     return temp_dir
 
 
@@ -49,8 +49,9 @@ def get_files_from_directory(base_dir: str, ignore_dirs: Set[str] = None) -> Lis
         ignore_dirs = set(DEFAULT_IGNORE_DIRS)
     files_list: List[str] = []
     for root, dirs, files in os.walk(base_dir):
+        # Exclude directories in the ignore set.
         dirs[:] = [d for d in dirs if d not in ignore_dirs]
         for file in files:
-            file_path = os.path.join(root, file)
+            file_path: str = os.path.join(root, file)
             files_list.append(file_path)
     return files_list

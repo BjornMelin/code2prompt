@@ -1,6 +1,6 @@
 # Code2Prompt 🚀
 
-**Code2Prompt** is a GUI-based desktop tool that transforms an entire codebase (e.g., Next.js, Python, or similar projects) into a structured, prompt-optimized format designed for language models like ChatGPT. This tool lets you customize which directories and files to ignore (e.g., `node_modules`, `.git`, etc.) and supports output in **Plaintext**, **Markdown**, or **XML** formats.
+**Code2Prompt** is a modern, web-based tool that transforms an entire codebase (e.g., Next.js, Python, or similar projects) into a structured, prompt-optimized format designed for language models like ChatGPT. Leveraging a Streamlit app for a sleek, user-friendly experience while maintaining modular, best-practice code organization, Code2Prompt is your go-to tool for prompt engineering.
 
 ---
 
@@ -23,12 +23,12 @@
 
 ## Features ✨
 
-- **Easy ZIP File Loading:** Upload a ZIP file containing your project source code.
-- **Customizable Ignore Settings:** Choose which directories/files to ignore (e.g., `node_modules`, `.next`, etc.).
+- **Streamlit Web Interface:** Upload ZIP files and configure settings through an interactive sidebar.
+- **Customizable Ignore Settings:** Easily select which directories/files to ignore (e.g., `node_modules`, `.git`, etc.).
 - **Multiple Output Formats:** Generate prompts in **Plaintext**, **Markdown**, or **XML**.
-- **Optimized for LLMs:** Structured file boundaries and language hints for improved prompt clarity.
-- **User-Friendly GUI:** Built with Tkinter for an intuitive user experience.
-- **Clipboard Integration:** Copy the generated prompt directly to your clipboard.
+- **Optimized for LLMs:** Structured file boundaries and language hints improve clarity.
+- **Performance Enhancements:** Utilizes caching and progress feedback for faster processing.
+- **Modular Design:** Clean, modular codebase following best practices with comprehensive documentation.
 
 ---
 
@@ -36,17 +36,15 @@
 
 ```mermaid
 graph TD;
-    A[main.py] --> B[gui.py]
-    B --> C[file_processor.py]
-    B --> D[formatter.py]
-    C --> E[config.py]
+    A[streamlit_app.py] --> B[config.py]
+    A --> C[file_processor.py]
+    A --> D[formatter.py]
 ```
 
-- **config.py:** Contains configuration settings and default ignore directories.
-- **file_processor.py:** Handles extraction of ZIP files and retrieving file paths.
+- **config.py:** Contains default configuration settings and ignore directories.
+- **file_processor.py:** Handles extraction of ZIP files and retrieval of file paths.
 - **formatter.py:** Formats file content into optimized prompts (Plaintext, Markdown, XML).
-- **gui.py:** Implements the GUI using Tkinter.
-- **main.py:** Entry point for launching the application.
+- **streamlit_app.py:** Main entry point for the Streamlit app.
 
 ---
 
@@ -68,7 +66,9 @@ graph TD;
 
 3. **Install Dependencies:**
 
-   This project uses only Python's standard library. For development, you may install tools like `mypy` for type checking and `black` for formatting.
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 4. **Format Code (Optional):**
 
@@ -85,43 +85,41 @@ graph TD;
 1. **Run the Application:**
 
    ```bash
-   python main.py
+   streamlit run streamlit_app.py
    ```
 
-2. **Using the GUI:**
-   - **Load .zip File:** Click to load a ZIP file containing your project.
-   - **Ignore Settings:** Customize directories/files to ignore.
-   - **Select Output Format:** Choose between Plaintext, Markdown, or XML.
-   - **Generate Prompt:** Click to generate an optimized prompt.
-   - **Copy to Clipboard:** Copy the generated prompt for use with your language model.
+2. **Using the App:**
+   - **Upload a ZIP File:** Click the file uploader to select your ZIP file.
+   - **Configure Settings:** Use the sidebar to select directories to ignore and choose your desired output format.
+   - **Generate Prompt:** Click the "Generate Prompt" button to process your file.
+   - **Review & Copy:** The generated prompt is displayed in the text area. Optionally, view a file tree preview.
 
 ---
 
 ## Screenshots 📸
 
-_Add screenshots or GIFs here to showcase the application UI and features._
+_Include screenshots or GIFs of the app here to showcase the modern UI._
 
-![Code2Prompt Screenshot](https://via.placeholder.com/800x400?text=Code2Prompt+GUI)
+![Code2Prompt Screenshot](https://via.placeholder.com/800x400?text=Code2Prompt+Streamlit+App)
 
 ---
 
 ## Mermaid Diagram
 
-Below is a Mermaid diagram representing the project structure:
+Below is a diagram representing the project structure:
 
 ```mermaid
 graph TD;
-    A[main.py] --> B[gui.py]
-    B --> C[file_processor.py]
-    B --> D[formatter.py]
-    C --> E[config.py]
+    A[streamlit_app.py] --> B[config.py]
+    A --> C[file_processor.py]
+    A --> D[formatter.py]
 ```
 
 ---
 
 ## Contributing 🤝
 
-We welcome contributions! Please fork the repository and submit a pull request with your changes. For major changes, open an issue first to discuss what you would like to change.
+Contributions are welcome! Please fork the repository and submit a pull request with your changes. For major changes, open an issue first to discuss your ideas.
 
 ---
 
@@ -144,7 +142,7 @@ If you use Code2Prompt in your research or project, please cite it using the fol
 ```bibtex
 @software{melin2025code2prompt,
   author       = {Bjorn Melin},
-  title        = {Code2Prompt: A GUI Tool for Codebase-to-Prompt Conversion},
+  title        = {Code2Prompt: A Streamlit Tool for Codebase-to-Prompt Conversion},
   year         = {2025},
   publisher    = {GitHub},
   journal      = {GitHub repository},

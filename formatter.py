@@ -1,11 +1,10 @@
 """Module for formatting file contents into prompt-friendly formats.
 
 This module provides functions to detect programming languages based on file extensions
-and format file content in Plaintext, Markdown, or XML formats optimized for LLM prompts.
+and to format file content in Plaintext, Markdown, or XML formats optimized for LLM prompts.
 """
 
 import os
-from typing import Any
 
 
 def get_language(file_name: str) -> str:
@@ -15,7 +14,7 @@ def get_language(file_name: str) -> str:
         file_name (str): The name of the file.
 
     Returns:
-        str: The detected programming language.
+        str: The detected programming language, or an empty string if unknown.
     """
     ext: str = os.path.splitext(file_name)[1].lower()
     mapping: dict[str, str] = {
