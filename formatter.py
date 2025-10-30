@@ -111,10 +111,7 @@ def format_file_content(
                     f"{fence}\n{content}\n```\n"
                     if not include_boundaries
                     else (
-                        f"## File: {rel_path}{metadata_str}\n"
-                        f"{fence}\n"
-                        f"{content}\n"
-                        "```\n"
+                        f"## File: {rel_path}{metadata_str}\n{fence}\n{content}\n```\n"
                     )
                 )
             case "XML":
